@@ -9,17 +9,44 @@ body{
     margin:0;
     overflow:hidden;
     font-family:Arial, sans-serif;
+    background:black;
+    color:white;
 }
 
-/* Foto */
-.bg{
+#startScreen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:black;
+    z-index:5;
+}
+
+button{
+    padding:20px 40px;
+    font-size:24px;
+    border:none;
+    border-radius:40px;
+    background:#ff4b5c;
+    color:white;
+    cursor:pointer;
+}
+
+.slide{
     position:fixed;
     width:100%;
     height:100%;
     object-fit:cover;
+    opacity:0;
+    transition:opacity 2s ease-in-out;
 }
 
-/* karartma */
+.active{
+    opacity:1;
+}
+
 .overlay{
     position:absolute;
     width:100%;
@@ -27,65 +54,76 @@ body{
     background:rgba(0,0,0,0.35);
 }
 
-/* yazı */
 .text{
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    color:white;
     font-size:42px;
     text-align:center;
-    white-space:nowrap;
-    overflow:hidden;
-    border-right:3px solid white;
-    width:0;
-    animation:typing 4s steps(40,end) forwards;
+    opacity:0;
+    transition:opacity 2s;
 }
 
-@keyframes typing{
-    from{width:0}
-    to{width:100%}
-}
-
-/* kalpler */
-.heart{
-    position:fixed;
-    bottom:-20px;
-    color:red;
-    font-size:24px;
-    animation:float 6s linear infinite;
-}
-
-@keyframes float{
-    from{transform:translateY(0); opacity:1;}
-    to{transform:translateY(-110vh); opacity:0;}
+.show{
+    opacity:1;
 }
 </style>
 </head>
 
 <body>
 
-<img src="https://i.ibb.co/pjJ5ZPDN/c691f742-f812-4fba-9b32-781ba2b03fac.jpg" class="bg">
+<div id="startScreen">
+    <button onclick="startSurprise()">Sürprizi Başlat ❤️</button>
+</div>
+
+<!-- FOTOĞRAFLAR -->
+<img src="https://i.ibb.co/pjJ5ZPDN/c691f742-f812-4fba-9b32-781ba2b03fac.jpg" class="slide active">
+<img src="https://i.ibb.co/CpyC7xtB/cc23a144-37e2-496e-a816-c5d44dc4285d.jpg" class="slide">
+<img src="https://i.ibb.co/dJm3jJ8j/eb6f4c07-ef7d-466b-b82b-a19f421277e8.jpg" class="slide">
+<img src="https://i.ibb.co/mrX4VbPd/91bc032f-c593-4688-8cd1-d7b5c8825cbd.jpg" class="slide">
+<img src="https://i.ibb.co/2369Vd2J/458ee843-5e86-490d-af14-df607aea426b.jpg" class="slide">
+<img src="https://i.ibb.co/sptqBF56/b875e736-bdca-463b-878e-899b693a4fcf.jpg" class="slide">
+<img src="https://i.ibb.co/Pz6SfJrf/5cdd52a2-fc18-42ee-846a-3ba9ffb999f5.jpg" class="slide">
+<img src="https://i.ibb.co/Bp34V3n/154069b1-a3c5-4fb4-9660-cdd6094fe798.jpg" class="slide">
+<img src="https://i.ibb.co/m5vwmhLb/841fe35c-dbaf-44c7-8e72-88e6523a62a9.jpg" class="slide">
+<img src="https://i.ibb.co/jPJLrHm4/8fb8d019-ee85-4b47-accc-c7a61ade4fbb.jpg" class="slide">
+<img src="https://i.ibb.co/93tP3X55/ae560b24-c52a-4ff3-8efb-3f968d81c4b9.jpg" class="slide">
+
 <div class="overlay"></div>
 
-<div class="text">İyi ki hayatımdasın ❤️ Seni çok seviyorum</div>
+<div id="finalText" class="text">
+Benimle sonsuza dek bu yolu yürür müsün? ❤️
+</div>
+
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-function createHeart(){
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random()*100 + "vw";
-    heart.style.fontSize = (20 + Math.random()*30) + "px";
-    document.body.appendChild(heart);
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+let music = document.getElementById("music");
 
-    setTimeout(()=>heart.remove(),6000);
+function startSurprise(){
+    document.getElementById("startScreen").style.display="none";
+    music.play();
+
+    let interval = setInterval(()=>{
+        slides[index].classList.remove("active");
+        index++;
+
+        if(index < slides.length){
+            slides[index].classList.add("active");
+        } else {
+            clearInterval(interval);
+            document.getElementById("finalText").classList.add("show");
+        }
+    },4000);
 }
-
-setInterval(createHeart,500);
 </script>
 
 </body>
 </html>
+
 
