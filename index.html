@@ -13,6 +13,7 @@ body{
     color:white;
 }
 
+/* Başlangıç ekranı */
 #startScreen{
     position:absolute;
     width:100%;
@@ -25,15 +26,19 @@ body{
 }
 
 button{
-    padding:20px 40px;
-    font-size:24px;
+    padding:15px 30px;
+    font-size:20px;
     border:none;
-    border-radius:40px;
-    background:#ff4b5c;
-    color:white;
+    border-radius:30px;
     cursor:pointer;
 }
 
+.startBtn{
+    background:#ff4b5c;
+    color:white;
+}
+
+/* Foto */
 .slide{
     position:fixed;
     width:100%;
@@ -54,19 +59,55 @@ button{
     background:rgba(0,0,0,0.35);
 }
 
+/* Final yazı */
 .text{
     position:absolute;
-    top:50%;
+    top:40%;
     left:50%;
-    transform:translate(-50%,-50%);
-    font-size:42px;
+    transform:translate(-50%,-50%) scale(0.5);
+    font-size:45px;
     text-align:center;
     opacity:0;
-    transition:opacity 2s;
+    transition:all 2s ease;
 }
 
 .show{
     opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+/* Buton alanı */
+#buttons{
+    position:absolute;
+    top:60%;
+    left:50%;
+    transform:translateX(-50%);
+    display:none;
+}
+
+.yesBtn{
+    background:#ff4b5c;
+    color:white;
+    margin-right:20px;
+}
+
+.noBtn{
+    background:white;
+    color:black;
+    position:absolute;
+}
+
+/* Kalpler */
+.heart{
+    position:fixed;
+    bottom:-20px;
+    font-size:24px;
+    animation:float 6s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(0); opacity:1;}
+    to{transform:translateY(-110vh); opacity:0;}
 }
 </style>
 </head>
@@ -74,7 +115,7 @@ button{
 <body>
 
 <div id="startScreen">
-    <button onclick="startSurprise()">Sürprizi Başlat ❤️</button>
+    <button class="startBtn" onclick="startSurprise()">Sürprizi Başlat ❤️</button>
 </div>
 
 <!-- FOTOĞRAFLAR -->
@@ -94,6 +135,11 @@ button{
 
 <div id="finalText" class="text">
 Benimle sonsuza dek bu yolu yürür müsün? ❤️
+</div>
+
+<div id="buttons">
+    <button class="yesBtn" onclick="celebrate()">Evet ❤️</button>
+    <button class="noBtn" onmouseover="moveButton(this)">Hayır</button>
 </div>
 
 <audio id="music" loop>
@@ -118,12 +164,12 @@ function startSurprise(){
         } else {
             clearInterval(interval);
             document.getElementById("finalText").classList.add("show");
+            document.getElementById("buttons").style.display="block";
+            startHearts();
         }
     },4000);
 }
-</script>
 
-</body>
-</html>
-
-
+function moveButton(btn){
+    btn.style.top = Math.random()*80 + "vh";
+    btn.style.left
