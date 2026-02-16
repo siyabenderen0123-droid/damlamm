@@ -11,6 +11,7 @@ body{
     font-family:Arial, sans-serif;
 }
 
+/* Foto */
 .bg{
     position:fixed;
     width:100%;
@@ -18,31 +19,47 @@ body{
     object-fit:cover;
 }
 
+/* karartma */
 .overlay{
     position:absolute;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
     background:rgba(0,0,0,0.35);
 }
 
+/* yazı */
 .text{
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
     color:white;
-    font-size:45px;
+    font-size:42px;
     text-align:center;
-    padding:20px 40px;
-    border-radius:20px;
-    animation:fade 3s ease-in-out;
+    white-space:nowrap;
+    overflow:hidden;
+    border-right:3px solid white;
+    width:0;
+    animation:typing 4s steps(40,end) forwards;
 }
 
-@keyframes fade{
-    from{opacity:0; transform:translate(-50%,-40%);}
-    to{opacity:1; transform:translate(-50%,-50%);}
+@keyframes typing{
+    from{width:0}
+    to{width:100%}
+}
+
+/* kalpler */
+.heart{
+    position:fixed;
+    bottom:-20px;
+    color:red;
+    font-size:24px;
+    animation:float 6s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(0); opacity:1;}
+    to{transform:translateY(-110vh); opacity:0;}
 }
 </style>
 </head>
@@ -50,13 +67,25 @@ body{
 <body>
 
 <img src="https://i.ibb.co/pjJ5ZPDN/c691f742-f812-4fba-9b32-781ba2b03fac.jpg" class="bg">
-
 <div class="overlay"></div>
 
-<div class="text">
-İyi ki hayatımdasın ❤️<br>
-Seni Çok Seviyorum 💖
-</div>
+<div class="text">İyi ki hayatımdasın ❤️ Seni çok seviyorum</div>
+
+<script>
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = (20 + Math.random()*30) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),6000);
+}
+
+setInterval(createHeart,500);
+</script>
 
 </body>
 </html>
+
