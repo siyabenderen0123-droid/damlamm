@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Senin İçin ❤️</title>
 <style>
 body{
@@ -16,8 +17,8 @@ body{
 /* Başlangıç ekranı */
 #startScreen{
     position:absolute;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -26,8 +27,8 @@ body{
 }
 
 button{
-    padding:15px 30px;
-    font-size:20px;
+    padding:12px 25px;
+    font-size:4vw;
     border:none;
     border-radius:30px;
     cursor:pointer;
@@ -41,8 +42,8 @@ button{
 /* Foto ve animasyon */
 .slide{
     position:fixed;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     object-fit:cover;
     opacity:0;
     transform: scale(1);
@@ -57,8 +58,8 @@ button{
 
 .overlay{
     position:absolute;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     background:rgba(0,0,0,0.35);
     z-index:2;
 }
@@ -69,16 +70,11 @@ button{
     top:40%;
     left:50%;
     transform:translate(-50%,-50%) scale(0.5);
-    font-size:45px;
+    font-size:6vw;
     text-align:center;
     opacity:0;
     transition:all 2s ease;
     z-index:5;
-}
-
-.show{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
 }
 
 /* Buton alanı */
@@ -94,7 +90,7 @@ button{
 .yesBtn{
     background:#ff4b5c;
     color:white;
-    margin-right:20px;
+    margin-right:3vw;
     transition: all 0.3s ease;
 }
 
@@ -109,7 +105,7 @@ button{
 .heart{
     position:fixed;
     bottom:-20px;
-    font-size:24px;
+    font-size:18px;
     animation:float 6s linear infinite;
     z-index:3;
 }
@@ -122,12 +118,29 @@ button{
 /* Particles */
 .particle{
     position:fixed;
-    width:5px;
-    height:5px;
+    width:2px;
+    height:2px;
     background:white;
     border-radius:50%;
     opacity:0.7;
     z-index:2;
+}
+
+/* Kar yağışı */
+.snow{
+    position:fixed;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
+    z-index:2;
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    0% {transform: translateY(-10px);}
+    100% {transform: translateY(110vh);}
 }
 </style>
 </head>
@@ -155,7 +168,7 @@ button{
 
 <!-- Telifsiz Romantik Müzik -->
 <audio id="music" autoplay loop>
-  <source src="https://cdn.pixabay.com/download/audio/2023/02/17/audio_7f4b8b9f0e.mp3?filename=romantic-acoustic-12356.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2023/06/15/audio_romantic-piano.mp3" type="audio/mpeg">
   Tarayıcınız audio elementini desteklemiyor.
 </audio>
 
@@ -183,6 +196,7 @@ function startSurprise(){
             document.getElementById("buttons").style.display="block";
             startHearts();
             startParticles();
+            startSnow();
         }
     },4000);
 }
@@ -200,56 +214,4 @@ function startHearts(){
         heart.classList.add("heart");
         heart.innerHTML="❤️";
         heart.style.left=Math.random()*100+"vw";
-        heart.style.fontSize=(20+Math.random()*30)+"px";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(),6000);
-    },500);
-}
-
-// Particles (hafif parlayan noktalar)
-function startParticles(){
-    setInterval(()=>{
-        const p = document.createElement("div");
-        p.classList.add("particle");
-        p.style.left=Math.random()*100+"vw";
-        p.style.top=Math.random()*100+"vh";
-        p.style.width=(2+Math.random()*4)+"px";
-        p.style.height=p.style.width;
-        document.body.appendChild(p);
-        setTimeout(()=>p.remove(),4000);
-    },300);
-}
-
-// Final yazıyı harf harf yazdırma
-function typeFinalText(){
-    let i = 0;
-    finalText.classList.add("show");
-    function type(){
-        if(i<fullText.length){
-            finalText.innerHTML += fullText.charAt(i);
-            i++;
-            setTimeout(type,100);
-        }
-    }
-    type();
-}
-
-// Evet butonuna basınca konfeti efekti
-function celebrate(){
-    for(let i=0;i<100;i++){
-        setTimeout(()=>{
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML="❤️";
-            heart.style.left=Math.random()*100+"vw";
-            heart.style.fontSize=(15+Math.random()*25)+"px";
-            document.body.appendChild(heart);
-            setTimeout(()=>heart.remove(),3000);
-        }, i*30);
-    }
-    alert("Sonsuza kadar birlikte ❤️");
-}
-</script>
-
-</body>
-</html>
+        heart.style
