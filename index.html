@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Senin İçin ❤️</title>
-
 <style>
 body{
     margin:0;
@@ -11,6 +10,7 @@ body{
     font-family:Arial, sans-serif;
     background:black;
     color:white;
+    position:relative;
 }
 
 /* Başlangıç ekranı */
@@ -22,7 +22,7 @@ body{
     justify-content:center;
     align-items:center;
     background:black;
-    z-index:5;
+    z-index:10;
 }
 
 button{
@@ -38,18 +38,21 @@ button{
     color:white;
 }
 
-/* Foto */
+/* Foto ve animasyon */
 .slide{
     position:fixed;
     width:100%;
     height:100%;
     object-fit:cover;
     opacity:0;
-    transition:opacity 2s ease-in-out;
+    transform: scale(1);
+    transition: all 4s ease-in-out;
+    z-index:1;
 }
 
 .active{
     opacity:1;
+    transform: scale(1.05);
 }
 
 .overlay{
@@ -57,10 +60,11 @@ button{
     width:100%;
     height:100%;
     background:rgba(0,0,0,0.35);
+    z-index:2;
 }
 
-/* Final yazı */
-.text{
+/* Final yazı ve typing efekti */
+#finalText{
     position:absolute;
     top:40%;
     left:50%;
@@ -69,6 +73,7 @@ button{
     text-align:center;
     opacity:0;
     transition:all 2s ease;
+    z-index:5;
 }
 
 .show{
@@ -83,18 +88,21 @@ button{
     left:50%;
     transform:translateX(-50%);
     display:none;
+    z-index:5;
 }
 
 .yesBtn{
     background:#ff4b5c;
     color:white;
     margin-right:20px;
+    transition: all 0.3s ease;
 }
 
 .noBtn{
     background:white;
     color:black;
     position:absolute;
+    transition: all 0.3s ease;
 }
 
 /* Kalpler */
@@ -103,15 +111,26 @@ button{
     bottom:-20px;
     font-size:24px;
     animation:float 6s linear infinite;
+    z-index:3;
 }
 
 @keyframes float{
-    from{transform:translateY(0); opacity:1;}
-    to{transform:translateY(-110vh); opacity:0;}
+    from{transform:translateY(0) rotate(0deg); opacity:1;}
+    to{transform:translateY(-110vh) rotate(360deg); opacity:0;}
+}
+
+/* Particles */
+.particle{
+    position:fixed;
+    width:5px;
+    height:5px;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    z-index:2;
 }
 </style>
 </head>
-
 <body>
 
 <div id="startScreen">
@@ -124,57 +143,57 @@ button{
 <img src="https://i.ibb.co/dJm3jJ8j/eb6f4c07-ef7d-466b-b82b-a19f421277e8.jpg" class="slide">
 <img src="https://i.ibb.co/mrX4VbPd/91bc032f-c593-4688-8cd1-d7b5c8825cbd.jpg" class="slide">
 <img src="https://i.ibb.co/2369Vd2J/458ee843-5e86-490d-af14-df607aea426b.jpg" class="slide">
-<img src="https://i.ibb.co/sptqBF56/b875e736-bdca-463b-878e-899b693a4fcf.jpg" class="slide">
-<img src="https://i.ibb.co/Pz6SfJrf/5cdd52a2-fc18-42ee-846a-3ba9ffb999f5.jpg" class="slide">
-<img src="https://i.ibb.co/Bp34V3n/154069b1-a3c5-4fb4-9660-cdd6094fe798.jpg" class="slide">
-<img src="https://i.ibb.co/m5vwmhLb/841fe35c-dbaf-44c7-8e72-88e6523a62a9.jpg" class="slide">
-<img src="https://i.ibb.co/jPJLrHm4/8fb8d019-ee85-4b47-accc-c7a61ade4fbb.jpg" class="slide">
-<img src="https://i.ibb.co/93tP3X55/ae560b24-c52a-4ff3-8efb-3f968d81c4b9.jpg" class="slide">
 
 <div class="overlay"></div>
 
-<div id="finalText" class="text">
-Benimle sonsuza dek bu yolu yürür müsün? ❤️
-</div>
+<div id="finalText"></div>
 
 <div id="buttons">
     <button class="yesBtn" onclick="celebrate()">Evet ❤️</button>
     <button class="noBtn" onmouseover="moveButton(this)">Hayır</button>
 </div>
 
-<audio id="music" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+<!-- Telifsiz Romantik Müzik -->
+<audio id="music" autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/02/17/audio_7f4b8b9f0e.mp3?filename=romantic-acoustic-12356.mp3" type="audio/mpeg">
+  Tarayıcınız audio elementini desteklemiyor.
 </audio>
 
 <script>
 let slides = document.querySelectorAll(".slide");
 let index = 0;
 let music = document.getElementById("music");
+let finalText = document.getElementById("finalText");
+const fullText = "Benimle sonsuza dek bu yolu yürür müsün? ❤️";
 
 function startSurprise(){
     document.getElementById("startScreen").style.display="none";
-    music.play();
+    music.volume = 0.5;
+    music.play().catch(e => console.log("Autoplay engellendi.", e));
 
+    // Foto slaytları
     let interval = setInterval(()=>{
         slides[index].classList.remove("active");
         index++;
-
         if(index < slides.length){
             slides[index].classList.add("active");
         } else {
             clearInterval(interval);
-            document.getElementById("finalText").classList.add("show");
+            typeFinalText();
             document.getElementById("buttons").style.display="block";
             startHearts();
+            startParticles();
         }
     },4000);
 }
 
+// Hayır butonu kaçma hareketi
 function moveButton(btn){
     btn.style.top = Math.random()*80 + "vh";
     btn.style.left = Math.random()*80 + "vw";
 }
 
+// Kalpler
 function startHearts(){
     setInterval(()=>{
         const heart = document.createElement("div");
@@ -187,7 +206,47 @@ function startHearts(){
     },500);
 }
 
+// Particles (hafif parlayan noktalar)
+function startParticles(){
+    setInterval(()=>{
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        p.style.left=Math.random()*100+"vw";
+        p.style.top=Math.random()*100+"vh";
+        p.style.width=(2+Math.random()*4)+"px";
+        p.style.height=p.style.width;
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),4000);
+    },300);
+}
+
+// Final yazıyı harf harf yazdırma
+function typeFinalText(){
+    let i = 0;
+    finalText.classList.add("show");
+    function type(){
+        if(i<fullText.length){
+            finalText.innerHTML += fullText.charAt(i);
+            i++;
+            setTimeout(type,100);
+        }
+    }
+    type();
+}
+
+// Evet butonuna basınca konfeti efekti
 function celebrate(){
+    for(let i=0;i<100;i++){
+        setTimeout(()=>{
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML="❤️";
+            heart.style.left=Math.random()*100+"vw";
+            heart.style.fontSize=(15+Math.random()*25)+"px";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),3000);
+        }, i*30);
+    }
     alert("Sonsuza kadar birlikte ❤️");
 }
 </script>
