@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
@@ -147,7 +148,7 @@ button{
 <body>
 
 <div id="startScreen">
-    <button class="startBtn" onclick="startSurprise()">Sürprizi Başlat ❤️</button>
+    <button class="startBtn">Sürprizi Başlat ❤️</button>
 </div>
 
 <!-- FOTOĞRAFLAR -->
@@ -162,56 +163,73 @@ button{
 <div id="finalText"></div>
 
 <div id="buttons">
-    <button class="yesBtn" onclick="celebrate()">Evet ❤️</button>
-    <button class="noBtn" onmouseover="moveButton(this)">Hayır</button>
+    <button class="yesBtn">Evet ❤️</button>
+    <button class="noBtn">Hayır</button>
 </div>
 
 <!-- Telifsiz Romantik Müzik -->
-<audio id="music" autoplay loop>
+<audio id="music" loop>
   <source src="https://cdn.pixabay.com/download/audio/2023/06/15/audio_romantic-piano.mp3" type="audio/mpeg">
   Tarayıcınız audio elementini desteklemiyor.
 </audio>
 
 <script>
-let slides = document.querySelectorAll(".slide");
-let index = 0;
-let music = document.getElementById("music");
-let finalText = document.getElementById("finalText");
-const fullText = "Benimle sonsuza dek bu yolu yürür müsün? ❤️";
+document.addEventListener("DOMContentLoaded", function(){
+    const startBtn = document.querySelector(".startBtn");
+    const yesBtn = document.querySelector(".yesBtn");
+    const noBtn = document.querySelector(".noBtn");
+    const slides = document.querySelectorAll(".slide");
+    const finalText = document.getElementById("finalText");
+    const buttonsDiv = document.getElementById("buttons");
+    const music = document.getElementById("music");
+    const fullText = "Benimle sonsuza dek bu yolu yürür müsün? ❤️";
 
-function startSurprise(){
-    document.getElementById("startScreen").style.display="none";
-    music.volume = 0.5;
-    music.play().catch(e => console.log("Autoplay engellendi.", e));
+    let index = 0;
 
-    // Foto slaytları
-    let interval = setInterval(()=>{
-        slides[index].classList.remove("active");
-        index++;
-        if(index < slides.length){
-            slides[index].classList.add("active");
-        } else {
-            clearInterval(interval);
-            typeFinalText();
-            document.getElementById("buttons").style.display="block";
-            startHearts();
-            startParticles();
-            startSnow();
-        }
-    },4000);
-}
+    startBtn.addEventListener("click", startSurprise);
+    noBtn.addEventListener("mouseover",()=>moveButton(noBtn));
+    yesBtn.addEventListener("click", celebrate);
 
-// Hayır butonu kaçma hareketi
-function moveButton(btn){
-    btn.style.top = Math.random()*80 + "vh";
-    btn.style.left = Math.random()*80 + "vw";
-}
+    function startSurprise(){
+        document.getElementById("startScreen").style.display="none";
+        music.volume = 0.5;
+        music.play().then(()=>{}).catch(()=>alert("Lütfen müziği başlatmak için tekrar dokun!"));
 
-// Kalpler
-function startHearts(){
-    setInterval(()=>{
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML="❤️";
-        heart.style.left=Math.random()*100+"vw";
-        heart.style
+        let interval = setInterval(()=>{
+            slides[index].classList.remove("active");
+            index++;
+            if(index < slides.length){
+                slides[index].classList.add("active");
+            } else {
+                clearInterval(interval);
+                typeFinalText();
+                buttonsDiv.style.display="block";
+                startHearts();
+                startParticles();
+                startSnow();
+            }
+        },4000);
+    }
+
+    function moveButton(btn){
+        btn.style.top = Math.random()*80 + "vh";
+        btn.style.left = Math.random()*80 + "vw";
+    }
+
+    function startHearts(){
+        setInterval(()=>{
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML="❤️";
+            heart.style.left=Math.random()*100+"vw";
+            heart.style.fontSize=(10+Math.random()*20)+"px";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),6000);
+        },500);
+    }
+
+    function startParticles(){
+        setInterval(()=>{
+            const p = document.createElement("div");
+
+                    
